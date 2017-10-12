@@ -5,20 +5,24 @@ import merge from 'lodash/merge';
 const defaultTags = {
   container: {
     tag: 'div',
+    design: 'div',
     props: {}
   },
   segment: {
     tag: 'div',
+    design: 'div',
     props: {}
   },
   ellipsis: {
     tag: 'div',
+    design: 'div',
     props: {
       children: '…'
     }
   },
   link: {
     tag: 'span',
+    design: 'div',
     props: {}
   }
 };
@@ -61,14 +65,17 @@ class Segment extends React.Component {
     const onSelect = context.onSelect;
     const tags = context.tags;
     const Tag = tags.segment.tag;
+    const Design = tags.segment.design;
     const Link = tags.link.tag;
     const pages = segments[field];
 
     return (<Tag {...tags.segment.props} {...props}>{pages.map((page) =>
-      <Link
-        {...tags.link.props}
-        key={`page-${page}`}
-        onClick={(e) => onSelect(page, e)}>{page}</Link>
+      <Design {...tags.segment.props}>                                                         
+        <Link
+          {...tags.link.props}
+          key={`page-${page}`}
+          onClick={(e) => onSelect(page, e)}>{page}</Link>
+      </Design>
     )}</Tag>);
   }
 }
@@ -88,12 +95,15 @@ class Button extends React.Component {
     const onSelect = context.onSelect;
     const tags = context.tags;
     const Tag = tags.segment.tag;
+    const Design = tags.segment.design;
     const Link = tags.link.tag;
 
     return (<Tag {...tags.segment.props} {...props}>
-      <Link
-        {...tags.link.props}
-        onClick={(e) => onSelect(page, e)}>{children}</Link>
+      <Design {...tags.segment.props}>
+        <Link
+          {...tags.link.props}
+          onClick={(e) => onSelect(page, e)}>{children}</Link>
+      </Design>
     </Tag>);
   }
 }
@@ -113,12 +123,17 @@ class Ellipsis extends React.Component {
     const segments = context.segments;
     const tags = context.tags;
     const Tag = tags.ellipsis.tag;
+    const Design = tags.ellipsis.design;
     const previousPages = segments[previousField];
     const nextPages = segments[nextField];
     const showEllipsis = nextPages[0] - previousPages.slice(-1)[0] > 1;
 
     if(showEllipsis) {
-      return <Tag {...tags.ellipsis.props} {...props}/>;
+      return (
+        <Design {...tags.ellipsis.props}>
+          <Tag {...tags.ellipsis.props} {...props}/>
+        </Design>
+      )
     }
 
     return null;
